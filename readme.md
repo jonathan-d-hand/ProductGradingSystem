@@ -1,4 +1,4 @@
-Project #5: Product Grading System | ViewTrak
+Project 5: Product Grading System | ViewTrak
 =============================================
 
 > Greetings!

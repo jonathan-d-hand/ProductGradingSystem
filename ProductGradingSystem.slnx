@@ -1,9 +1,4 @@
 <Solution>
-  <Project Path="ProductGrading/ProductGradingSystem.Model.csproj" Id="c2311f9f-afe4-4b88-a34b-949027773fb4" />
-  <Project Path="ProductGradingSystem.SQLDatabase/ProductGradingSystem.SQLDatabase.sqlproj" Id="2904f5d1-d392-4d75-b3e7-9d4305a21453">
-    <Build />
-    <Deploy />
-  </Project>
   <Project Path="ProductGradingTool.Core/ProductGradingTool.Core.csproj" Id="26a48aeb-cee8-4d55-b16d-a7e62eb766bc" />
   <Project Path="ProductGradingTool.Data.Sqlite/ProductGradingTool.Data.Sqlite.csproj" Id="fd522f93-bc6f-4caf-84b0-3644965b5464" />
   <Project Path="ProductGradingTool.WpfClient/ProductGradingTool.WpfClient.csproj" />
