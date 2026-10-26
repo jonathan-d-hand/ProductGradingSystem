@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProductGradingTool.WpfClient"
+        xmlns:vm="clr-namespace:ProductGradingTool.WpfClient.ViewModel"
         mc:Ignorable="d"
         Title="Product Grading Tool" Height="516" Width="800"
         Loaded="OnWindowLoaded">
@@ -34,7 +35,30 @@
                         </Grid.RowDefinitions>
 
                         <Label Grid.Row="0" HorizontalAlignment="Right" FontWeight="Bold">
-                            <TextBlock Text="{ Binding Product.CurrentState }" />
+                            <TextBlock Text="{ Binding Product.CurrentState }">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="Black"></Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{ Binding Product.CurrentState }" Value="{x:Static vm:ProductViewState.NO_DATA}">
+                                                <Setter Property="Foreground" Value="Black"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{ Binding Product.CurrentState }" Value="{x:Static vm:ProductViewState.NEW_SCAN}">
+                                                <Setter Property="Foreground" Value="Blue"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{ Binding Product.CurrentState }" Value="{x:Static vm:ProductViewState.SAVED}">
+                                                <Setter Property="Foreground" Value="Green"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{ Binding Product.CurrentState }" Value="{x:Static vm:ProductViewState.HISTORY}">
+                                                <Setter Property="Foreground" Value="Gray"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{ Binding Product.CurrentState }" Value="{x:Static vm:ProductViewState.INVALID}">
+                                                <Setter Property="Foreground" Value="Red"></Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </Label>
                     
                         <Grid Grid.Row="1">

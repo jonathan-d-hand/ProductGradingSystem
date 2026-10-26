@@ -4,20 +4,20 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using ProductGradingTool.Model;
 
+public enum ProductViewState
+{
+    NO_DATA,  //-Normal
+    NEW_SCAN, //-Blue
+    SAVED,    //-Green
+    HISTORY,  //-Grey
+    INVALID   //-Red
+}
+
 /// <summary>
 /// View model interface for product information.
 /// </summary>
 public partial class ProductViewModel : ObservableObject
 {
-    public enum ProductViewState
-    {
-        NO_DATA,  //-Normal
-        NEW_SCAN, //-Blue
-        SAVED,    //-Green
-        HISTORY,  //-Grey
-        INVALID   //-Red
-    }
-
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEditable))]
     public partial ProductViewState CurrentState { get; set; } = ProductViewState.NO_DATA;

@@ -55,6 +55,7 @@ public partial class WeightCaptureViewModel : ObservableObject
     private void Reset()
     {
         CapturedWeight = null;
+        WeakReferenceMessenger.Default.Send(new WeightChangedMessage(null));
     }
 
     private void OnResetTerminal(object recipient, ResetTerminalMessage message)
