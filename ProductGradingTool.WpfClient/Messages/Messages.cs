@@ -27,3 +27,8 @@ public class SubmitScanMessage : ValueChangedMessage<bool>
 {
     public SubmitScanMessage(bool value) : base(value) { }
 }
+
+public class ResetTerminalMessage : ValueChangedMessage<bool>
+{
+    public ResetTerminalMessage(bool value) : base(value) { }
+}

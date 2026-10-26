@@ -13,7 +13,8 @@ public partial class ProductViewModel : ObservableObject
     {
         NO_DATA,  //-Normal
         NEW_SCAN, //-Blue
-        HISTORY,  //-Green
+        SAVED,    //-Green
+        HISTORY,  //-Grey
         INVALID   //-Red
     }
 
@@ -55,6 +56,8 @@ public partial class ProductViewModel : ObservableObject
         WeakReferenceMessenger.Default.Register<WeightChangedMessage>(this, OnWeightChanged);
         WeakReferenceMessenger.Default.Register<ProductIdChangedMessage>(this, OnProductIdChanged);
         WeakReferenceMessenger.Default.Register<GradeChangedMessage>(this, OnGradeChanged);
+        WeakReferenceMessenger.Default.Register<ResetTerminalMessage>(this, OnResetTerminal);
+        WeakReferenceMessenger.Default.Register<SubmitScanMessage>(this, OnSubmitScan);
     }
 
     private void OnWeightChanged(object recipient, WeightChangedMessage message)
@@ -64,6 +67,7 @@ public partial class ProductViewModel : ObservableObject
 
     private void OnProductIdChanged(object recipient, ProductIdChangedMessage message)
     {
+        ResetFields();
         ProductId = message.Value;
         CurrentState = ProductViewState.NEW_SCAN;
     }
@@ -74,6 +78,26 @@ public partial class ProductViewModel : ObservableObject
         FatValue = grade.FatValue;
         LeanValue = grade.LeanValue;
         Grade = grade.Grade;
+    }
+
+    private void OnResetTerminal(object recipient, ResetTerminalMessage message)
+    {
+        CurrentState = ProductViewState.NO_DATA;
+        ResetFields();
+    }
+
+    private void OnSubmitScan(object recipient, SubmitScanMessage message)
+    {
+        CurrentState = ProductViewState.SAVED;
+    }
+
+    private void ResetFields()
+    {
+        ProductId = string.Empty;
+        Weight = string.Empty;
+        FatValue = string.Empty;
+        LeanValue = string.Empty;
+        Grade = string.Empty;
     }
 
 }

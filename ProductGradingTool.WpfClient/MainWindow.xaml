@@ -33,7 +33,9 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-                        <Label Grid.Row="0" HorizontalAlignment="Right" FontWeight="Bold">NO DATA</Label>
+                        <Label Grid.Row="0" HorizontalAlignment="Right" FontWeight="Bold">
+                            <TextBlock Text="{ Binding Product.CurrentState }" />
+                        </Label>
                     
                         <Grid Grid.Row="1">
                             <Grid.RowDefinitions>

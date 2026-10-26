@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using ProductGradingTool.WpfClient.Services;
+using static ProductGradingTool.WpfClient.ViewModel.ProductViewModel;
 
 public partial class WeightCaptureViewModel : ObservableObject
 {
@@ -12,6 +13,9 @@ public partial class WeightCaptureViewModel : ObservableObject
     public WeightCaptureViewModel(DialogService dialogService)
     {
         _dialogService = dialogService;
+
+        WeakReferenceMessenger.Default.Register<ResetTerminalMessage>(this, OnResetTerminal);
+        WeakReferenceMessenger.Default.Register<ProductIdChangedMessage>(this, OnProductIdChanged);
     }
 
     [ObservableProperty]
@@ -27,13 +31,14 @@ public partial class WeightCaptureViewModel : ObservableObject
         get => !string.IsNullOrEmpty(CapturedWeight) ? CapturedWeight : LiveWeight;
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanCapture))]
     private void Capture()
     {
-        CapturedWeight = LiveWeight;
-
-        //_scanBuilder.CaptureWeight(CapturedWeight.Value);
+        //todo: Support capturing of live reading.
     }
+
+    //todo: Support capturing of live reading.
+    private bool CanCapture() => false;
 
     [RelayCommand]
     private void Input()
@@ -51,4 +56,15 @@ public partial class WeightCaptureViewModel : ObservableObject
     {
         CapturedWeight = null;
     }
+
+    private void OnResetTerminal(object recipient, ResetTerminalMessage message)
+    {
+        CapturedWeight = null;
+    }
+
+    private void OnProductIdChanged(object recipient, ProductIdChangedMessage message)
+    {
+        CapturedWeight = null;
+    }
+
 }

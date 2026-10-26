@@ -22,7 +22,7 @@ public class SqliteProductScanRepository : IProductScanRepository
     {
         string commandText = @"
 CREATE TABLE IF NOT EXISTS ProductScan (
-    ProductId TEXT NOT NULL PRIMARY KEY,
+    ProductId TEXT NOT NULL,
     UserId TEXT NOT NULL,
     TimeStamp INTEGER NOT NULL DEFAULT (unixepoch()),
     Weight TEXT NULL,

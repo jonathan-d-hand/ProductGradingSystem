@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using ProductGradingTool.WpfClient.Services;
+using System.Windows.Navigation;
 
 public partial class CommandViewModel : ObservableObject
 {
@@ -34,11 +35,14 @@ public partial class CommandViewModel : ObservableObject
         WeakReferenceMessenger.Default.Send(new UserIdChangedMessage(result));
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanMarkContaminated))]
     private void MarkContaminated()
     {
-        
+        //todo: Implement disqualifying process for product.
     }
+
+    //todo: Implement disqualifying process for product.
+    private bool CanMarkContaminated() => false;
 
     [RelayCommand]
     private void Submit()
@@ -49,12 +53,15 @@ public partial class CommandViewModel : ObservableObject
     [RelayCommand]
     private void Reset()
     {
-
+        WeakReferenceMessenger.Default.Send(new ResetTerminalMessage(true));
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanSuspend))]
     private void Suspend()
     {
-
+        //todo: Implement screen cleaning process.
     }
+
+    //todo: Implement screen cleaning process.
+    private bool CanSuspend() => false;
 }
