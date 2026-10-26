@@ -2,41 +2,29 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using ProductGradingTool.Model;
 using ProductGradingTool.WpfClient.Services;
+using System.Collections.ObjectModel;
 
 /// <summary>
 /// This is the main view model intended for the MainWindow's context binding.
 /// </summary>
 public partial class MainViewModel : ObservableObject
 {
+    //-dependencies.
     private readonly DialogService _dialogService;
     private readonly IProductScanBuilder _scanBuilder;
+    private readonly IProductHistory _history;
     
-    //-ViewModels
+    //-view models.
     public CommandViewModel Command { get; set; }
     public ProductViewModel Product { get; private set; }
     public WeightCaptureViewModel WeightCapture { get; private set; }
 
-    public MainViewModel(
-        CommandViewModel command,
-        ProductViewModel product,
-        WeightCaptureViewModel weightCapture,
-        DialogService dialogService, 
-        IProductScanBuilder scanBuilder)
-    {
-        Command = command;
-        Product = product;
-        WeightCapture = weightCapture;
-        _dialogService = dialogService;
-        _scanBuilder = scanBuilder;
-        
-        WeakReferenceMessenger.Default.Register<UserIdChangedMessage>(this, OnUserIdChanged);
-        WeakReferenceMessenger.Default.Register<ProductIdChangedMessage>(this, OnProductIdChanged);
-        WeakReferenceMessenger.Default.Register<WeightChangedMessage>(this, OnWeightChanged);
-        WeakReferenceMessenger.Default.Register<SubmitScanMessage>(this, OnSubmitScan);
-    }
-
     //todo: Implement GradeCaptureViewModel.
+
+    [ObservableProperty] //todo: update data, don't replace the collection.
+    private ObservableCollection<ProductHistoryItem> _productHistory;
 
     /// <summary>
     /// Signed-in User ID logged by the user.
@@ -56,10 +44,36 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial string BatchId { get; set; } = "NA";
 
-    public void StartWithUserId(string userId)
+    //-ctor.
+    public MainViewModel(
+        CommandViewModel command,
+        ProductViewModel product,
+        WeightCaptureViewModel weightCapture,
+        DialogService dialogService,
+        IProductScanBuilder scanBuilder,
+        IProductHistory history)
     {
-        UserId = userId;
-        _scanBuilder.SetUserId(UserId);
+        Command = command;
+        Product = product;
+        WeightCapture = weightCapture;
+        _dialogService = dialogService;
+        _scanBuilder = scanBuilder;
+        _history = history;
+
+        WeakReferenceMessenger.Default.Register<UserIdChangedMessage>(this, OnUserIdChanged);
+        WeakReferenceMessenger.Default.Register<ProductIdChangedMessage>(this, OnProductIdChanged);
+        WeakReferenceMessenger.Default.Register<WeightChangedMessage>(this, OnWeightChanged);
+        WeakReferenceMessenger.Default.Register<SubmitScanMessage>(this, OnSubmitScan);
+
+        RefreshProductHistory();
+    }
+
+    private void RefreshProductHistory()
+    {
+        IEnumerable<ProductHistoryItem> historyItems = _history.LoadProductHistory();
+
+        //todo: update data, don't replace the collection.
+        ProductHistory = new ObservableCollection<ProductHistoryItem>(historyItems);
     }
 
     private void OnUserIdChanged(object recipient, UserIdChangedMessage message)
@@ -82,6 +96,13 @@ public partial class MainViewModel : ObservableObject
     private void OnSubmitScan(object recipient, SubmitScanMessage message)
     {
         _scanBuilder.Submit();
+        RefreshProductHistory();
+    }
+
+    public void StartWithUserId(string userId)
+    {
+        UserId = userId;
+        _scanBuilder.SetUserId(UserId);
     }
 
 }

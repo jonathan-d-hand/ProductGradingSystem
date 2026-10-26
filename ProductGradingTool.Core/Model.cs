@@ -1,7 +1,5 @@
 ﻿namespace ProductGradingTool.Model;
 
-
-
 public class ProductScan
 {
     public string ProductId { get; set; }
@@ -17,4 +15,12 @@ public class GradeScan
     public string FatValue { get; set; }
     public string LeanValue { get; set; }
     public string Grade { get; set; }
+}
+
+public class ProductHistoryItem
+{
+    public string ProductId { get; set; }
+    public DateTime TimeStamp { get; set; }
+    public bool Synced { get; set; }
+    public bool IsInvalid { get; set; } = false;
 }

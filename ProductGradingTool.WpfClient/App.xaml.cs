@@ -41,6 +41,7 @@ namespace ProductGradingTool.WpfClient
             services.AddTransient<WeightCaptureViewModel>();
 
             //-Services.
+            services.AddSingleton<IProductHistory, ProductHistory>();
             services.AddSingleton<IProductScanBuilder, ProductScanBuilder>();
             services.AddTransient<IProductScanRepository>((provider) => new SqliteProductScanRepository(localConnectionString));
         }

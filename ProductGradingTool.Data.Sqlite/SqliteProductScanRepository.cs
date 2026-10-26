@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS ProductScan (
     FatValue TEXT NULL,
     LeanValue TEXT NULL,
     Grade TEXT NULL,
-    SetInvalid BIT NOT NULL DEFAULT 0
+    SetInvalid INTEGER NOT NULL DEFAULT 0
 )";
         using (var connection = new SqliteConnection(_connectionString))
         {
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS ProductScan (
 SELECT
     ProductId,
     UserId,
-    TimeStamp,
+    DATETIME(TimeStamp, 'unixepoch'),
     Weight,
     FatValue,
     LeanValue,
@@ -74,11 +74,11 @@ FROM
                         Weight = reader.GetString(3),
                         Grade = new GradeScan
                         {
-                            FatValue = reader.GetString(4),
-                            LeanValue = reader.GetString(5),
-                            Grade = reader.GetString(6)
+                            FatValue = !reader.IsDBNull(4) ? reader.GetString(4) : null,
+                            LeanValue = !reader.IsDBNull(5) ? reader.GetString(5) : null, 
+                            Grade = !reader.IsDBNull(6) ? reader.GetString(6) : null
                         },
-                        SetInvalid = Convert.ToBoolean(reader.GetString(7))
+                        SetInvalid = reader.GetString(7) != "0"
                     });
                 }
             }
