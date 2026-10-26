@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ProductGradingTool.WpfClient"
         mc:Ignorable="d"
         ResizeMode="NoResize"
+        Title="Keypad Input"
         Width="250"
         Height="416"
         FocusManager.FocusedElement="{Binding ElementName=InputTextBox}">

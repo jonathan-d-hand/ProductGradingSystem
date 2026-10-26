@@ -58,6 +58,7 @@ public partial class ProductViewModel : ObservableObject
         WeakReferenceMessenger.Default.Register<GradeChangedMessage>(this, OnGradeChanged);
         WeakReferenceMessenger.Default.Register<ResetTerminalMessage>(this, OnResetTerminal);
         WeakReferenceMessenger.Default.Register<SubmitScanMessage>(this, OnSubmitScan);
+        WeakReferenceMessenger.Default.Register<MarkContaminatedMessage>(this, OnMarkContaminated);
     }
 
     private void OnWeightChanged(object recipient, WeightChangedMessage message)
@@ -91,6 +92,11 @@ public partial class ProductViewModel : ObservableObject
         CurrentState = ProductViewState.SAVED;
     }
 
+    private void OnMarkContaminated(object recipient, MarkContaminatedMessage message)
+    {
+        CurrentState = ProductViewState.INVALID;
+    }
+
     private void ResetFields()
     {
         ProductId = string.Empty;
@@ -99,5 +105,6 @@ public partial class ProductViewModel : ObservableObject
         LeanValue = string.Empty;
         Grade = string.Empty;
     }
+
 
 }

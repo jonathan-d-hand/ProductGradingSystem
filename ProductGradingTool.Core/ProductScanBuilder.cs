@@ -19,6 +19,15 @@ public class ProductScanBuilder : IProductScanBuilder
     /// <inheritdoc/>
     public ProductScan Result { get => _activeProductScan; }
 
+    public bool CaptureEnabled
+    {
+        get
+        {
+            return _activeProductScan != null && !string.IsNullOrEmpty(_activeProductScan.ProductId)
+                && !_activeProductScan.SetInvalid;
+        }
+    }
+
     //-ctor.
     public ProductScanBuilder(IProductScanRepository repository)
     {
@@ -44,19 +53,24 @@ public class ProductScanBuilder : IProductScanBuilder
     /// <inheritdoc/>
     public void CaptureGrade(GradeScan grade)
     {
+        //todo: check capture enabled. (unit testing requirement)
         _activeProductScan.Grade = grade;
     }
 
     /// <inheritdoc/>
     public void CaptureWeight(string weight)
     {
+        //todo: check capture enabled. (unit testing requirement)
         _activeProductScan.Weight = weight;
     }
 
     /// <inheritdoc/>
     public void MarkInvalid()
     {
+        //todo: check capture enabled. (unit testing requirement)
         _activeProductScan.SetInvalid = true;
+        _repository.Save(Result);
+        Clear();
     }
 
     /// <inheritdoc/>
@@ -69,5 +83,6 @@ public class ProductScanBuilder : IProductScanBuilder
     public void Submit()
     {
         _repository.Save(Result);
+        Clear();
     }
 }

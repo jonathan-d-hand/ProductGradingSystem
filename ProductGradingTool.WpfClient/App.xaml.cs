@@ -35,7 +35,7 @@ namespace ProductGradingTool.WpfClient
             services.AddSingleton<DialogService>();
 
             //-ViewModels.
-            services.AddTransient<MainViewModel>();
+            services.AddSingleton<MainViewModel>();
             services.AddTransient<CommandViewModel>();
             services.AddTransient<ProductViewModel>();
             services.AddTransient<WeightCaptureViewModel>();

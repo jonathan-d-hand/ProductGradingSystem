@@ -13,6 +13,11 @@ public interface IProductScanBuilder
     ProductScan Result { get; }
 
     /// <summary>
+    /// This flag determines if data can be captured.
+    /// </summary>
+    bool CaptureEnabled { get; }
+
+    /// <summary>
     /// Sets the product ID which will reset the scan process.
     /// </summary>
     void SetProductId(string productId);

@@ -71,7 +71,7 @@ FROM
                         ProductId = reader.GetString(0),
                         UserId = reader.GetString(1),
                         TimeStamp = Convert.ToDateTime(reader.GetString(2)),
-                        Weight = reader.GetString(3),
+                        Weight = !reader.IsDBNull(3) ? reader.GetString(3) : null,
                         Grade = new GradeScan
                         {
                             FatValue = !reader.IsDBNull(4) ? reader.GetString(4) : null,
@@ -116,7 +116,10 @@ VALUES(
             {
                 command.Parameters.AddWithValue("@productId", scan.ProductId);
                 command.Parameters.AddWithValue("@userId", scan.UserId);
-                command.Parameters.AddWithValue("@weight", scan.Weight);
+                if (scan.Weight != null)
+                    command.Parameters.AddWithValue("@weight", scan.Weight);
+                else
+                    command.Parameters.AddWithValue("@weight", DBNull.Value);
                 if (scan.Grade != null)
                 {
                     command.Parameters.AddWithValue("@fatValue", scan.Grade.FatValue);

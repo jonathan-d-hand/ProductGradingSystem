@@ -10,11 +10,19 @@ public partial class CommandViewModel : ObservableObject
 {
     //-dependencies.
     private readonly DialogService _dialogService;
+    private readonly IProductScanBuilder _scanBuilder;
 
     //-ctor.
-    public CommandViewModel(DialogService dialogService)
+    public CommandViewModel(DialogService dialogService, IProductScanBuilder scanBuilder)
     {
         _dialogService = dialogService;
+        _scanBuilder = scanBuilder;
+    }
+
+    public void NotifyCanExecuteAll()
+    {
+        SubmitCommand.NotifyCanExecuteChanged();
+        MarkContaminatedCommand.NotifyCanExecuteChanged();
     }
 
     [RelayCommand]
@@ -38,16 +46,25 @@ public partial class CommandViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanMarkContaminated))]
     private void MarkContaminated()
     {
-        //todo: Implement disqualifying process for product.
+        //todo: Implement warning dialog box for marking a product contaminated.
+        WeakReferenceMessenger.Default.Send(new MarkContaminatedMessage(true));
     }
 
     //todo: Implement disqualifying process for product.
-    private bool CanMarkContaminated() => false;
+    private bool CanMarkContaminated()
+    {
+        return _scanBuilder.CaptureEnabled;
+    }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanSubmit))]
     private void Submit()
     {
         WeakReferenceMessenger.Default.Send(new SubmitScanMessage(true));
+    }
+
+    private bool CanSubmit()
+    {
+        return _scanBuilder.CaptureEnabled;
     }
 
     [RelayCommand]

@@ -64,6 +64,8 @@ public partial class MainViewModel : ObservableObject
         WeakReferenceMessenger.Default.Register<ProductIdChangedMessage>(this, OnProductIdChanged);
         WeakReferenceMessenger.Default.Register<WeightChangedMessage>(this, OnWeightChanged);
         WeakReferenceMessenger.Default.Register<SubmitScanMessage>(this, OnSubmitScan);
+        WeakReferenceMessenger.Default.Register<ResetTerminalMessage>(this, OnResetTerminal);
+        WeakReferenceMessenger.Default.Register<MarkContaminatedMessage>(this, OnMarkContaminated);
 
         RefreshProductHistory();
     }
@@ -86,6 +88,7 @@ public partial class MainViewModel : ObservableObject
     private void OnProductIdChanged(object recipient, ProductIdChangedMessage message)
     {
         _scanBuilder.SetProductId(message.Value);
+        Command.NotifyCanExecuteAll();
     }
 
     private void OnWeightChanged(object recipient, WeightChangedMessage message)
@@ -93,10 +96,23 @@ public partial class MainViewModel : ObservableObject
         _scanBuilder.CaptureWeight(message.Value);
     }
 
+    private void OnResetTerminal(object recipient, ResetTerminalMessage message)
+    {
+        Command.NotifyCanExecuteAll();
+    }
+
     private void OnSubmitScan(object recipient, SubmitScanMessage message)
     {
         _scanBuilder.Submit();
         RefreshProductHistory();
+        Command.NotifyCanExecuteAll();
+    }
+
+    private void OnMarkContaminated(object recipient, MarkContaminatedMessage message)
+    {
+        _scanBuilder.MarkInvalid();
+        RefreshProductHistory();
+        Command.NotifyCanExecuteAll();
     }
 
     public void StartWithUserId(string userId)
@@ -104,5 +120,6 @@ public partial class MainViewModel : ObservableObject
         UserId = userId;
         _scanBuilder.SetUserId(UserId);
     }
+
 
 }

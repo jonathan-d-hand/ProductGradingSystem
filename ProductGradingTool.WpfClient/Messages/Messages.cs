@@ -32,3 +32,8 @@ public class ResetTerminalMessage : ValueChangedMessage<bool>
 {
     public ResetTerminalMessage(bool value) : base(value) { }
 }
+
+public class MarkContaminatedMessage : ValueChangedMessage<bool>
+{
+    public MarkContaminatedMessage(bool value) : base(value) { }
+}
