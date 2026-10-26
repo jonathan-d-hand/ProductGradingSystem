@@ -98,7 +98,7 @@ Instructions
 Controls are locked until a user ID is entered first. You can input any number
 you want to proceed.
 
-![Initial View](screenshots/screenshot-00.png)
+![Initial View](/screenshots/screenshot-00.png?raw=true)
 
 *No external devices are supported at this time, so you will have to use the*
 *provided controls to manually input values.*
