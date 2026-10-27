@@ -8,6 +8,7 @@ using static ProductGradingTool.WpfClient.ViewModel.ProductViewModel;
 
 public partial class WeightCaptureViewModel : ObservableObject
 {
+    //-dependencies.
     private readonly DialogService _dialogService;
 
     public WeightCaptureViewModel(DialogService dialogService)
@@ -54,8 +55,7 @@ public partial class WeightCaptureViewModel : ObservableObject
     [RelayCommand]
     private void Reset()
     {
-        CapturedWeight = null;
-        WeakReferenceMessenger.Default.Send(new WeightChangedMessage(null));
+        //todo: reset fields back to their original values.
     }
 
     private void OnResetTerminal(object recipient, ResetTerminalMessage message)

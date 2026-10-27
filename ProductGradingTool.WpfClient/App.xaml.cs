@@ -5,8 +5,6 @@ using ProductGradingTool.Data;
 using ProductGradingTool.Data.Sqlite;
 using ProductGradingTool.WpfClient.Services;
 using ProductGradingTool.WpfClient.ViewModel;
-using System.Configuration;
-using System.Data;
 using System.Windows;
 
 namespace ProductGradingTool.WpfClient
@@ -39,6 +37,7 @@ namespace ProductGradingTool.WpfClient
             services.AddTransient<CommandViewModel>();
             services.AddTransient<ProductViewModel>();
             services.AddTransient<WeightCaptureViewModel>();
+            services.AddTransient<GradeCaptureViewModel>();
 
             //-Services.
             services.AddSingleton<IProductHistory, ProductHistory>();

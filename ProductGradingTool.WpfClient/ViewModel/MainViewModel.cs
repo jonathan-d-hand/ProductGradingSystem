@@ -17,9 +17,10 @@ public partial class MainViewModel : ObservableObject
     private readonly IProductHistory _history;
     
     //-view models.
-    public CommandViewModel Command { get; set; }
+    public CommandViewModel Command { get; private set; }
     public ProductViewModel Product { get; private set; }
     public WeightCaptureViewModel WeightCapture { get; private set; }
+    public GradeCaptureViewModel GradeCapture { get; private set; }
     //todo: Implement GradeCaptureViewModel.
 
     [ObservableProperty] //todo: update data, don't replace the collection.
@@ -45,19 +46,23 @@ public partial class MainViewModel : ObservableObject
 
     //-ctor.
     public MainViewModel(
+        IProductScanBuilder scanBuilder,
+        IProductHistory history,
+        DialogService dialogService,
         CommandViewModel command,
         ProductViewModel product,
+        //todo: move these to widget provider.
         WeightCaptureViewModel weightCapture,
-        DialogService dialogService,
-        IProductScanBuilder scanBuilder,
-        IProductHistory history)
+        GradeCaptureViewModel gradeCapture
+        )
     {
+        _scanBuilder = scanBuilder;
+        _history = history;
+        _dialogService = dialogService;
         Command = command;
         Product = product;
         WeightCapture = weightCapture;
-        _dialogService = dialogService;
-        _scanBuilder = scanBuilder;
-        _history = history;
+        GradeCapture = gradeCapture;
 
         WeakReferenceMessenger.Default.Register<UserIdChangedMessage>(this, OnUserIdChanged);
         WeakReferenceMessenger.Default.Register<ProductIdChangedMessage>(this, OnProductIdChanged);
@@ -106,6 +111,7 @@ public partial class MainViewModel : ObservableObject
         Product.FatValue = grade.FatValue;
         Product.LeanValue = grade.LeanValue;
         Product.Grade = grade.Grade;
+        _scanBuilder.CaptureGrade(grade);
     }
 
     private void OnResetTerminal(object recipient, ResetTerminalMessage message)

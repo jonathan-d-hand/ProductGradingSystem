@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="ProductGradingTool.WpfClient.GradeCaptureWidget"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ProductGradingTool.WpfClient"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="HorizontalContentAlignment" Value="Right" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="20,10" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="Bold"></Setter>
+        </Style>
+    </UserControl.Resources>
+    <Border Padding="4" Background="White">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Right">Fat Value</Label>
+            <TextBox Grid.Row="0" Grid.Column="1" HorizontalContentAlignment="Right" IsReadOnly="True" Text="{ Binding GradeCapture.FatValue, Mode=OneWay }"></TextBox>
+
+            <Label Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Right">Lean Value</Label>
+            <TextBox Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Right" IsReadOnly="True" Text="{ Binding GradeCapture.LeanValue, Mode=OneWay }"></TextBox>
+
+            <Label Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Right">Grade</Label>
+            <TextBox Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Right" IsReadOnly="True" Text="{ Binding GradeCapture.Grade, Mode=OneWay }"></TextBox>
+
+            <Button Grid.Row="3" Grid.Column="1" Command="{ Binding GradeCapture.InputCommand }">Input</Button>
+            <Button Grid.Row="4" Grid.Column="1" Command="{ Binding GradeCapture.ResetCommand }">Reset</Button>
+
+        </Grid>
+    </Border>
+</UserControl>

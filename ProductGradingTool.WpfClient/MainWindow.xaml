@@ -105,6 +105,7 @@
                 <Border> <!-- Main scan interface -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <local:WeightCapturePanel IsEnabled="{ Binding Product.IsEditable }" />
+                        <local:GradeCaptureWidget IsEnabled="{ Binding Product.IsEditable }" />
                     </StackPanel>
                 </Border>
             </DockPanel>
