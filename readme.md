@@ -147,3 +147,8 @@ was, though the resulting UI ended up looking much different.
 I have a tendency to avoid Wysiwyg editors, but I did rely on the design editor
 for reference. I built the interface using straight XAML code, tweaking and
 adjusting properties until it looked right.
+
+**Where is the grading portion of this application?**
+
+It's not done yet. I wanted the main logic done first before I tackled it. The
+weight widget was the simplest to begin with.
