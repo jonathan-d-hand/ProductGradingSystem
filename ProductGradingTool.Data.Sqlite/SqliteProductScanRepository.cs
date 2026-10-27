@@ -18,6 +18,28 @@ public class SqliteProductScanRepository : IProductScanRepository
         InitializeTables();
     }
 
+    private ProductScan FromReader(SqliteDataReader reader)
+    {
+        var ret = new ProductScan()
+        {
+            ProductId = reader.GetString(0),
+            UserId = reader.GetString(1),
+            TimeStamp = Convert.ToDateTime(reader.GetString(2)),
+            Weight = !reader.IsDBNull(3) ? reader.GetString(3) : null,
+            SetInvalid = reader.GetString(7) != "0"
+        };
+        if (!reader.IsDBNull(4) || !reader.IsDBNull(5) || !reader.IsDBNull(6))
+        {
+            ret.Grade = new GradeScan()
+            {
+                FatValue = !reader.IsDBNull(4) ? reader.GetString(4) : null,
+                LeanValue = !reader.IsDBNull(5) ? reader.GetString(5) : null,
+                Grade = !reader.IsDBNull(6) ? reader.GetString(6) : null
+            };
+        }
+        return ret;
+    }
+
     private void InitializeTables()
     {
         string commandText = @"
@@ -66,20 +88,46 @@ FROM
             {
                 while (reader.Read())
                 {
-                    list.Add(new ProductScan
+                    list.Add(FromReader(reader));
+                }
+            }
+        }
+
+        return list.ToImmutableArray();
+    }
+
+    public IEnumerable<ProductScan> QuerySaved(string productId)
+    {
+        List<ProductScan> list = new List<ProductScan>();
+        string commandText = @"
+SELECT
+    ProductId,
+    UserId,
+    DATETIME(TimeStamp, 'unixepoch'),
+    Weight,
+    FatValue,
+    LeanValue,
+    Grade,
+    SetInvalid
+FROM
+    ProductScan
+WHERE
+    ProductId = @productId
+";
+
+        using (var connection = new SqliteConnection(_connectionString))
+        {
+            connection.Open();
+            using (var command = new SqliteCommand(commandText, connection))
+            {
+                command.Parameters.AddWithValue("@productId", productId);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
                     {
-                        ProductId = reader.GetString(0),
-                        UserId = reader.GetString(1),
-                        TimeStamp = Convert.ToDateTime(reader.GetString(2)),
-                        Weight = !reader.IsDBNull(3) ? reader.GetString(3) : null,
-                        Grade = new GradeScan
-                        {
-                            FatValue = !reader.IsDBNull(4) ? reader.GetString(4) : null,
-                            LeanValue = !reader.IsDBNull(5) ? reader.GetString(5) : null, 
-                            Grade = !reader.IsDBNull(6) ? reader.GetString(6) : null
-                        },
-                        SetInvalid = reader.GetString(7) != "0"
-                    });
+                        list.Add(FromReader(reader));
+                    }
                 }
             }
         }
@@ -138,4 +186,5 @@ VALUES(
             }
         }
     }
+
 }

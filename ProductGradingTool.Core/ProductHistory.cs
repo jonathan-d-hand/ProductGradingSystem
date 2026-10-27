@@ -21,7 +21,10 @@ public class ProductHistory : IProductHistory
     /// <inheritdoc/>
     public ProductScan LoadLatestScan(string productId)
     {
-        throw new NotImplementedException();
+        IEnumerable<ProductScan> productScans = _repository.QuerySaved(productId);
+
+        return productScans.OrderByDescending(productScan => productScan.TimeStamp)
+            .FirstOrDefault();
     }
 
     /// <inheritdoc/>

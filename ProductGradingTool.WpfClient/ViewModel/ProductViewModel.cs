@@ -1,7 +1,6 @@
 namespace ProductGradingTool.WpfClient.ViewModel;
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Messaging;
 using ProductGradingTool.Model;
 
 public enum ProductViewState
@@ -22,12 +21,6 @@ public partial class ProductViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsEditable))]
     public partial ProductViewState CurrentState { get; set; } = ProductViewState.NO_DATA;
 
-    /// <summary>
-    /// The current working product ID.
-    /// </summary>
-    /// <remarks>
-    /// This is normally scanned in by a device or manual input.
-    /// </remarks>
     [ObservableProperty]
     public partial string ProductId { get; set; }
 
@@ -51,60 +44,27 @@ public partial class ProductViewModel : ObservableObject
 
     public bool IsEditable { get => CurrentState == ProductViewState.NEW_SCAN; }
 
-    public ProductViewModel()
+    public void LoadFields(ProductScan productScan)
     {
-        WeakReferenceMessenger.Default.Register<WeightChangedMessage>(this, OnWeightChanged);
-        WeakReferenceMessenger.Default.Register<ProductIdChangedMessage>(this, OnProductIdChanged);
-        WeakReferenceMessenger.Default.Register<GradeChangedMessage>(this, OnGradeChanged);
-        WeakReferenceMessenger.Default.Register<ResetTerminalMessage>(this, OnResetTerminal);
-        WeakReferenceMessenger.Default.Register<SubmitScanMessage>(this, OnSubmitScan);
-        WeakReferenceMessenger.Default.Register<MarkContaminatedMessage>(this, OnMarkContaminated);
+        if (productScan.SetInvalid)
+            CurrentState = ProductViewState.INVALID;
+        else
+            CurrentState = ProductViewState.NEW_SCAN;
+        ProductId = productScan.ProductId;
+        Weight = productScan.Weight;
+        FatValue = productScan.Grade?.FatValue;
+        LeanValue = productScan.Grade?.LeanValue;
+        Grade = productScan.Grade?.Grade;
     }
 
-    private void OnWeightChanged(object recipient, WeightChangedMessage message)
-    {
-        Weight = message.Value;
-    }
-
-    private void OnProductIdChanged(object recipient, ProductIdChangedMessage message)
-    {
-        ResetFields();
-        ProductId = message.Value;
-        CurrentState = ProductViewState.NEW_SCAN;
-    }
-
-    private void OnGradeChanged(object recipient, GradeChangedMessage message)
-    {
-        GradeScan grade = message.Value;
-        FatValue = grade.FatValue;
-        LeanValue = grade.LeanValue;
-        Grade = grade.Grade;
-    }
-
-    private void OnResetTerminal(object recipient, ResetTerminalMessage message)
+    public void ResetFields()
     {
         CurrentState = ProductViewState.NO_DATA;
-        ResetFields();
-    }
-
-    private void OnSubmitScan(object recipient, SubmitScanMessage message)
-    {
-        CurrentState = ProductViewState.SAVED;
-    }
-
-    private void OnMarkContaminated(object recipient, MarkContaminatedMessage message)
-    {
-        CurrentState = ProductViewState.INVALID;
-    }
-
-    private void ResetFields()
-    {
         ProductId = string.Empty;
         Weight = string.Empty;
         FatValue = string.Empty;
         LeanValue = string.Empty;
         Grade = string.Empty;
     }
-
 
 }

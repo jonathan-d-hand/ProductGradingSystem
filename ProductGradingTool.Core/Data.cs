@@ -7,6 +7,7 @@ using System.Collections.Immutable;
 public interface IProductScanRepository
 {
     IEnumerable<ProductScan> QuerySaved();
+    IEnumerable<ProductScan> QuerySaved(string productId);
     void Save(ProductScan scan);
 }
 
@@ -19,6 +20,11 @@ public class InMemoryProductScanRepository : IProductScanRepository
     public IEnumerable<ProductScan> QuerySaved()
     {
         return _saved.ToImmutableArray();
+    }
+
+    public IEnumerable<ProductScan> QuerySaved(string productId)
+    {
+        return _saved.Where(x => x.ProductId == productId).ToImmutableArray();
     }
 
     public void Save(ProductScan scan)

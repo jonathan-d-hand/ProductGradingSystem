@@ -20,7 +20,6 @@ public partial class MainViewModel : ObservableObject
     public CommandViewModel Command { get; set; }
     public ProductViewModel Product { get; private set; }
     public WeightCaptureViewModel WeightCapture { get; private set; }
-
     //todo: Implement GradeCaptureViewModel.
 
     [ObservableProperty] //todo: update data, don't replace the collection.
@@ -62,6 +61,7 @@ public partial class MainViewModel : ObservableObject
 
         WeakReferenceMessenger.Default.Register<UserIdChangedMessage>(this, OnUserIdChanged);
         WeakReferenceMessenger.Default.Register<ProductIdChangedMessage>(this, OnProductIdChanged);
+        WeakReferenceMessenger.Default.Register<GradeChangedMessage>(this, OnGradeChanged);
         WeakReferenceMessenger.Default.Register<WeightChangedMessage>(this, OnWeightChanged);
         WeakReferenceMessenger.Default.Register<SubmitScanMessage>(this, OnSubmitScan);
         WeakReferenceMessenger.Default.Register<ResetTerminalMessage>(this, OnResetTerminal);
@@ -88,22 +88,36 @@ public partial class MainViewModel : ObservableObject
     private void OnProductIdChanged(object recipient, ProductIdChangedMessage message)
     {
         _scanBuilder.SetProductId(message.Value);
+
+        Product.LoadFields(_scanBuilder.Result);
+
         Command.NotifyCanExecuteAll();
     }
 
     private void OnWeightChanged(object recipient, WeightChangedMessage message)
     {
+        Product.Weight = message.Value;
         _scanBuilder.CaptureWeight(message.Value);
+    }
+
+    private void OnGradeChanged(object recipient, GradeChangedMessage message)
+    {
+        GradeScan grade = message.Value;
+        Product.FatValue = grade.FatValue;
+        Product.LeanValue = grade.LeanValue;
+        Product.Grade = grade.Grade;
     }
 
     private void OnResetTerminal(object recipient, ResetTerminalMessage message)
     {
+        Product.ResetFields();
         Command.NotifyCanExecuteAll();
     }
 
     private void OnSubmitScan(object recipient, SubmitScanMessage message)
     {
         _scanBuilder.Submit();
+        Product.CurrentState = ProductViewState.SAVED;
         RefreshProductHistory();
         Command.NotifyCanExecuteAll();
     }
@@ -111,6 +125,7 @@ public partial class MainViewModel : ObservableObject
     private void OnMarkContaminated(object recipient, MarkContaminatedMessage message)
     {
         _scanBuilder.MarkInvalid();
+        Product.CurrentState = ProductViewState.INVALID;
         RefreshProductHistory();
         Command.NotifyCanExecuteAll();
     }

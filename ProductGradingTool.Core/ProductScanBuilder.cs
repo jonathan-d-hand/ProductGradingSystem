@@ -37,11 +37,23 @@ public class ProductScanBuilder : IProductScanBuilder
     /// <inheritdoc/>
     public void SetProductId(string productId)
     {
+        ProductScan latest = _repository.QuerySaved(productId)
+            .OrderByDescending(scan => scan.TimeStamp)
+            .FirstOrDefault();
+
         _activeProductScan = new ProductScan()
         {
             ProductId = productId,
             UserId = _userId
         };
+
+        if (latest != null)
+        {
+            _activeProductScan.Weight = latest.Weight;
+            _activeProductScan.Grade = latest.Grade;
+            _activeProductScan.SetInvalid = latest.SetInvalid;
+        }
+
     }
 
     /// <inheritdoc/>
@@ -70,7 +82,6 @@ public class ProductScanBuilder : IProductScanBuilder
         //todo: check capture enabled. (unit testing requirement)
         _activeProductScan.SetInvalid = true;
         _repository.Save(Result);
-        Clear();
     }
 
     /// <inheritdoc/>
