@@ -131,12 +131,19 @@ article for the information I needed.
 **Did you have any help with this project?**
 
 No. Not this time. However, back when I worked on the original project, I
-received a lot of guidance from Chris Nightingale who was leader of the overall
-project at ViewTrak.  Dwayne Ellis and Ted Power were also good sources of
-feedback back then, as they got to observe each stage of development.
+received a lot of guidance from Chris Nightingale who was dev lead at ViewTrak.
+Dwayne Ellis (Manager) and Ted Power (CEO) were also good sources of feedback
+back then, as they got to observe each stage of development.
 
-**How did you build the user interface?  Did you use code generation at all?**
+**How did you come up with the user interface?**
 
-I have a default tendancy to avoid the use of wysiwyg tools, but in this
-case I found the editor to be useful for reference and measuring. While I
-didn't use any generated XAML, I still used generated code-behind.
+It is a loose replica of the design I used in the original project. Back then
+I came up with the design by illustrating it using pen and paper for Chris to
+evaluate. I recall him saying he really liked how clean and clear the drawing
+was, though the resulting UI ended up looking much different.
+
+**Did you use the design editor in Visual Studio?**
+
+I have a tendency to avoid Wysiwyg editors, but I did rely on the design editor
+for reference. I built the interface using straight XAML code, tweaking and
+adjusting properties until it looked right.
